@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="QuartzSoftware">
+<meta name="theme-color" content="#3b6f7d" id="themeColor">
+<meta name="color-scheme" content="light dark">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>QuartzSoftware</title>
+<style>
+:root{
+  --bg:#f3f0e8; --card:#fbfaf6; --text:#2a2f36; --muted:#6a7280; --line:#e3dfd3;
+  --pri:#3f7d8c; --on-pri:#ffffff; --hdr:#3b6f7d; --on-hdr:#f4f8f9;
+  --soft:#e4eef0; --on-soft:#2f6573; --danger:#c0575b; --on-danger:#ffffff; --good:#4f8a5b;
+  --ok-bg:#e7f0e6; --ok-bd:#c3d8c4; --ok-text:#3f7a4c;
+  --due-bg:#f6e6e2; --due-bd:#e6c3bc; --due-text:#a94442;
+  --warn-bg:#f7efd9; --warn-bd:#e5d6a6; --info-bg:#e4eef0; --info-bd:#c4d9de;
+  --input:#fffefb; --ro:#efece3;
+  --shadow:0 1px 2px rgba(60,50,30,.06),0 6px 18px rgba(60,50,30,.05);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme]){
+    --bg:#14171c; --card:#1d2128; --text:#d9dde4; --muted:#8e97a5; --line:#2b313b;
+    --pri:#3f7f90; --on-pri:#f2f7f8; --hdr:#1b2027; --on-hdr:#dfe6ea;
+    --soft:#26313a; --on-soft:#8fc4d1; --danger:#b5565a; --on-danger:#fbeeee; --good:#4f8a5b;
+    --ok-bg:#1d2b23; --ok-bd:#2f4a39; --ok-text:#8fd09b;
+    --due-bg:#321f21; --due-bd:#553336; --due-text:#e08a8d;
+    --warn-bg:#2d2819; --warn-bd:#4d4426; --info-bg:#1f2a33; --info-bd:#33454f;
+    --input:#171b21; --ro:#20252d; --shadow:0 1px 2px rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171c; --card:#1d2128; --text:#d9dde4; --muted:#8e97a5; --line:#2b313b;
+  --pri:#3f7f90; --on-pri:#f2f7f8; --hdr:#1b2027; --on-hdr:#dfe6ea;
+  --soft:#26313a; --on-soft:#8fc4d1; --danger:#b5565a; --on-danger:#fbeeee; --good:#4f8a5b;
+  --ok-bg:#1d2b23; --ok-bd:#2f4a39; --ok-text:#8fd09b;
+  --due-bg:#321f21; --due-bd:#553336; --due-text:#e08a8d;
+  --warn-bg:#2d2819; --warn-bd:#4d4426; --info-bg:#1f2a33; --info-bd:#33454f;
+  --input:#171b21; --ro:#20252d; --shadow:0 1px 2px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+:root[data-theme="sage"]{
+  --bg:#eef2ea; --card:#f7f9f4; --text:#26302a; --muted:#66736a; --line:#dce4d6; --pri:#5b8a68; --on-pri:#ffffff; --hdr:#4f7a5c; --on-hdr:#f3f8f4; --soft:#e1ece1; --on-soft:#3b6a4a; --danger:#bf5f5a; --on-danger:#ffffff; --good:#5b8a68; --ok-bg:#e3eedf; --ok-bd:#c2d6bd; --ok-text:#3f7a4c; --due-bg:#f4e5e1; --due-bd:#e3c4bd; --due-text:#a94442; --warn-bg:#f4efd6; --warn-bd:#e0d6a0; --info-bg:#e1ece1; --info-bd:#c3d7c5; --input:#fbfdf9; --ro:#e9eee4; --shadow:0 1px 2px rgba(40,60,50,.06),0 6px 18px rgba(40,60,50,.05); color-scheme:light;
+}
+:root[data-theme="ocean"]{
+  --bg:#eaf0f4; --card:#f6f9fb; --text:#22303a; --muted:#627583; --line:#d8e2e9; --pri:#4b7ea3; --on-pri:#ffffff; --hdr:#3f6f93; --on-hdr:#f2f7fb; --soft:#dde9f2; --on-soft:#2f5f82; --danger:#c0605e; --on-danger:#ffffff; --good:#4f8a76; --ok-bg:#e1eee9; --ok-bd:#bfd8cf; --ok-text:#3b7a65; --due-bg:#f5e6e4; --due-bd:#e5c6c2; --due-text:#a94442; --warn-bg:#f4efd9; --warn-bd:#e0d6a8; --info-bg:#dde9f2; --info-bd:#bfd3e2; --input:#fbfdfe; --ro:#e6edf2; --shadow:0 1px 2px rgba(40,60,50,.06),0 6px 18px rgba(40,60,50,.05); color-scheme:light;
+}
+:root[data-theme="midnight"]{
+  --bg:#0f1420; --card:#171e2e; --text:#d3d9e6; --muted:#8591a8; --line:#26304a; --pri:#4d74b8; --on-pri:#f2f5fb; --hdr:#141b2b; --on-hdr:#d6ddea; --soft:#1f2a42; --on-soft:#93b2e6; --danger:#b45a60; --on-danger:#fbeef0; --good:#3f8a78; --ok-bg:#1a2b2a; --ok-bd:#2d4a45; --ok-text:#8fd0bf; --due-bg:#2f1f26; --due-bd:#52333d; --due-text:#e38b95; --warn-bg:#2b2a1c; --warn-bd:#4a4627; --info-bg:#1b263b; --info-bd:#2f4166; --input:#121827; --ro:#1b2233; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark;
+}
+:root[data-theme="amber"]{
+  --bg:#1a1612; --card:#241e18; --text:#e3d6c4; --muted:#a0917c; --line:#3a3027; --pri:#9a6a30; --on-pri:#fff4e2; --hdr:#211b15; --on-hdr:#e9dcc8; --soft:#33291f; --on-soft:#e0b77d; --danger:#b5564f; --on-danger:#fdeeea; --good:#6f8f45; --ok-bg:#232a1b; --ok-bd:#3b4a2b; --ok-text:#b3cf86; --due-bg:#35201d; --due-bd:#5a3530; --due-text:#e59a8f; --warn-bg:#332b17; --warn-bd:#54471f; --info-bg:#2d251c; --info-bd:#4a3d2e; --input:#1f1a14; --ro:#2a231c; --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,input{-webkit-appearance:none;appearance:none;font-family:inherit;touch-action:manipulation}
+input[type=number]{-moz-appearance:textfield}
+body{background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px));line-height:1.45;transition:background .25s,color .25s}
+header{background:var(--hdr);color:var(--on-hdr);padding:calc(13px + env(safe-area-inset-top,0px)) calc(14px + env(safe-area-inset-right,0px)) 13px calc(14px + env(safe-area-inset-left,0px));display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:5;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+header h1{font-size:18px;font-weight:600;letter-spacing:.2px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header button{background:rgba(255,255,255,.13);color:var(--on-hdr);border:0;padding:9px 13px;min-height:38px;border-radius:11px;font-size:14px;cursor:pointer}
+header button:active{background:rgba(255,255,255,.22)}
+header button.xl{background:var(--good);color:#fff}
+header button.theme{padding:9px 11px;font-size:15px}
+main{max-width:640px;margin:0 auto;padding:16px max(14px,env(safe-area-inset-right,0px)) 16px max(14px,env(safe-area-inset-left,0px))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item{cursor:pointer;transition:transform .08s,border-color .15s}
+.item:active{transform:scale(.99)}
+@media (hover:hover){.item:hover{border-color:var(--pri)}}
+.item b{font-size:16px;font-weight:600}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.btn{background:var(--pri);color:var(--on-pri);border:0;border-radius:12px;padding:13px 16px;font-size:15px;font-weight:600;width:100%;cursor:pointer;transition:filter .15s,transform .08s}
+@media (hover:hover){.btn:hover{filter:brightness(1.06)}}
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.6}
+.btn.del{background:var(--danger);color:var(--on-danger);width:auto;padding:10px 14px;min-height:40px;font-size:13px;font-weight:500}
+.btn.edit{background:var(--soft);color:var(--on-soft);width:auto;padding:10px 14px;min-height:40px;font-size:13px;font-weight:500}
+.btn.ghost{background:var(--soft);color:var(--on-soft);font-weight:500}
+.btn.excel{background:var(--good);color:#fff}
+input[readonly]{background:var(--ro);color:var(--muted)}
+.lock{font-size:12px;color:var(--muted);margin-top:6px}
+label{display:block;font-size:13px;color:var(--muted);margin:12px 0 5px;font-weight:500}
+input{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:var(--input);color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(120,150,170,.30);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 25%,transparent)}
+.bal{background:var(--ok-bg);border:1px solid var(--ok-bd);color:var(--ok-text);border-radius:14px;padding:14px;margin-top:14px;text-align:center}
+.bal.due{background:var(--due-bg);border-color:var(--due-bd);color:var(--due-text)}
+.bal.tot{background:var(--info-bg);border-color:var(--info-bd);color:var(--text)}
+.bal small{display:block;color:var(--muted);font-size:12px;letter-spacing:.4px;text-transform:uppercase}
+.bal strong{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.steps{display:flex;gap:6px;margin:6px 0 8px}
+.steps span{flex:1;text-align:center;font-size:12px;padding:6px 0;border-radius:999px;background:var(--soft);color:var(--on-soft)}
+.hist{font-size:13px;border-bottom:1px solid var(--line);padding:10px 0}
+.hist:last-child{border-bottom:0}
+.hist time{color:var(--muted);font-size:12px;display:block;margin-bottom:2px}
+.empty{text-align:center;color:var(--muted);padding:34px 0}
+.dt{background:var(--soft);border-radius:10px;padding:9px 11px;font-size:13px;color:var(--text);margin-top:12px}
+.entry{border-bottom:1px solid var(--line);padding:12px 0}
+.entry:last-child{border-bottom:0}
+.entry .acts{display:flex;gap:6px}
+h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.note{background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:14px;padding:13px;margin-bottom:12px;font-size:14px;text-align:center}
+.note p{margin-bottom:10px;color:var(--text)}
+.note.warn{background:var(--warn-bg);border-color:var(--warn-bd)}
+#sync{text-align:center;font-size:12px;padding:4px 8px;color:var(--muted);min-height:22px}
+#sync.err{background:var(--due-bg);color:var(--due-text);cursor:pointer}
+footer{position:fixed;left:0;right:0;bottom:0;z-index:5;text-align:center;color:var(--muted);background:var(--bg);border-top:1px solid var(--line);font-size:12px;letter-spacing:.3px;padding:9px 0 calc(9px + env(safe-area-inset-bottom,0px))}
+/* Add Model / Add Client: floating button, bottom-right */
+#add{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(58px + env(safe-area-inset-bottom,0px));width:auto;border-radius:999px;padding:15px 22px;z-index:6;box-shadow:0 10px 24px rgba(0,0,0,.28)}
+#themeMenu{display:none;position:fixed;top:calc(62px + env(safe-area-inset-top,0px));right:calc(10px + env(safe-area-inset-right,0px));z-index:20;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.28);padding:6px;min-width:200px}
+#themeMenu button{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;color:var(--text);padding:10px 12px;border-radius:10px;font-size:14px;text-align:left;cursor:pointer}
+#themeMenu button.on{background:var(--soft);color:var(--on-soft);font-weight:600}
+#themeMenu i{width:16px;height:16px;border-radius:50%;border:1px solid var(--line);display:inline-block;flex:none}
+.setup{background:var(--warn-bg);border:1px solid var(--warn-bd);border-radius:14px;padding:13px;font-size:14px;margin-bottom:12px}
+.boot{text-align:center;color:var(--due-text);padding:30px 10px;font-size:14px}
+.fatal{background:var(--due-bg);border:1px solid var(--due-bd);color:var(--due-text);border-radius:14px;padding:14px;font-size:14px;margin:10px}
+</style>
+<script>
+// Shows a clear message on screen if the app fails to start (instead of a blank page)
+window.addEventListener("error", function(ev){
+  var el = document.getElementById("app");
+  if(!el || el.dataset.err) return;
+  el.dataset.err = "1";
+  el.innerHTML = '<div class="fatal">' +
+    '<b>The app could not start.</b><br>Error: ' + String(ev.message || "unknown").replace(/[<>&]/g, "") +
+    '<br><br>Please download the latest Aa.html file again, replace the old file, and reload (Ctrl+Shift+R).</div>';
+});
+</script>
+</head>
+<body>
+<header>
+  <button id="back" style="display:none">← Back</button>
+  <h1 id="title">Models</h1>
+  <button id="xlBtn" class="xl" style="display:none">📊 Excel</button>
+  <button id="histBtn">History</button>
+  <button id="themeBtn" class="theme" title="Change theme">🎨</button>
+</header>
+<div id="themeMenu"></div>
+<div id="sync"></div>
+<main id="app"><div class="boot">Loading…<br><br>If this message stays, the file is incomplete or damaged.<br>Please download the latest Aa.html again, replace the old file, and reload.</div></main>
+<footer>© kush jethloja</footer>
+
+<script>
+// ====== FIREBASE CONFIG: paste the config from the Firebase console here ======
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyA2nECKHmxYxTNBHJVkMCT7uThavnes5xQ",
+  authDomain: "hisaab-7fd73.firebaseapp.com",
+  projectId: "hisaab-7fd73",
+  storageBucket: "hisaab-7fd73.firebasestorage.app",
+  messagingSenderId: "754835384045",
+  appId: "1:754835384045:web:bb7eaeed38539d56b74ee4"
+};
+// ====================================================================================
+let loading = false;
+let db = {models: [], history: []};
+let view = {page: "models"};
+
+// Molding & Color are saved once; each entry holds only the fitting.
+function migrate(){
+  db.models.forEach(m => m.clients.forEach(c => {
+    if(!Array.isArray(c.entries)) c.entries = [];
+    if(c.entries.some(e => "color" in e || "molding" in e)){
+      const first = c.entries[c.entries.length - 1];
+      c.molding = first.molding || "";
+      c.color = first.color || "";
+      c.entries = c.entries.map(e => ({id: e.id, t: e.t, fitting: e.fitting || ""})).filter(e => num(e.fitting) > 0);
+    }
+    if(c.molding === undefined) c.molding = "";
+    if(c.color === undefined) c.color = "";
+    // Each Molding/Color has its own "round": a new round starts after the balance reaches 0
+    if(!Array.isArray(c.rounds)){
+      c.rounds = [{id: uid(), molding: c.molding, color: c.color, entries: c.entries}];
+      delete c.molding; delete c.color; delete c.entries;
+    }
+  }));
+  save();
+}
+function save(){ if(loading) return; db.savedAt = Date.now(); cloudQueue(); }
+function log(text){
+  db.history.unshift({t: new Date().toLocaleString("en-IN"), text});
+  save();
+}
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const num = v => parseFloat(v) || 0;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const paid = c => c.entries.reduce((s, e) => s + num(e.fitting), 0);
+const total = c => num(c.color) - paid(c);
+const rs = n => "₹" + n.toLocaleString("en-IN");
+const fdate = t => new Date(t).toLocaleDateString("en-IN", {day:"2-digit", month:"short", year:"numeric"});
+const ftime = t => new Date(t).toLocaleTimeString("en-IN", {hour:"2-digit", minute:"2-digit", hour12:true});
+
+// ---- Themes (default: follows the device; the 🎨 button lets you pick) ----
+const THEMES = [["auto","Auto (device)","#9aa5ab"],["light","Cream","#f3f0e8"],["dark","Soft Dark","#1d2128"],["sage","Sage Green","#5b8a68"],["ocean","Ocean Mist","#4b7ea3"],["midnight","Midnight Blue","#171e2e"],["amber","Amber Night","#9a6a30"]];
+const themeBtn = document.getElementById("themeBtn"), themeMenu = document.getElementById("themeMenu");
+try { const st = localStorage.getItem("bizTheme"); if(st && THEMES.some(t => t[0] === st)) document.documentElement.dataset.theme = st; } catch(e){}
+function syncThemeColor(){
+  const h = getComputedStyle(document.documentElement).getPropertyValue("--hdr").trim();
+  const m = document.getElementById("themeColor"); if(m && h) m.setAttribute("content", h);
+}
+try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncThemeColor); } catch(e){}
+function setTheme(t){
+  if(t === "auto") delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = t;
+  try { if(t === "auto") localStorage.removeItem("bizTheme"); else localStorage.setItem("bizTheme", t); } catch(e){}
+  syncThemeColor();
+}
+function drawThemeMenu(){
+  const cur = document.documentElement.dataset.theme || "auto";
+  themeMenu.innerHTML = THEMES.map(t => `<button data-t="${t[0]}" class="${t[0] === cur ? "on" : ""}"><i style="background:${t[2]}"></i>${t[1]}</button>`).join("");
+  themeMenu.querySelectorAll("button").forEach(b => b.onclick = e => { e.stopPropagation(); setTheme(b.dataset.t); themeMenu.style.display = "none"; });
+}
+themeBtn.onclick = e => { e.stopPropagation(); drawThemeMenu(); themeMenu.style.display = themeMenu.style.display === "block" ? "none" : "block"; };
+document.addEventListener("click", () => { themeMenu.style.display = "none"; });
+syncThemeColor();
+
+const app = document.getElementById("app");
+const title = document.getElementById("title");
+const backBtn = document.getElementById("back");
+const xlBtn = document.getElementById("xlBtn");
+xlBtn.onclick = () => {
+  const m = db.models.find(x => x.id === view.mid);
+  const c = m && m.clients.find(x => x.id === view.cid);
+  if(c) exportExcel(m, c);
+};
+
+backBtn.onclick = () => {
+  if(view.page === "client") view = {page: "clients", mid: view.mid};
+  else view = {page: "models"};
+  render();
+};
+document.getElementById("histBtn").onclick = () => { view = {page: "history"}; render(); };
+
+// ================= ACCOUNTS (username/password, separate accounts data per account) =================
+const sha256 = (() => {
+  const K = [], H0 = [];
+  const isPrime = x => { for(let i = 2; i * i <= x; i++) if(x % i === 0) return false; return true; };
+  for(let n = 2; K.length < 64; n++){
+    if(!isPrime(n)) continue;
+    if(H0.length < 8) H0.push((Math.pow(n, 1/2) % 1) * 4294967296 | 0);
+    K.push((Math.pow(n, 1/3) % 1) * 4294967296 | 0);
+  }
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+  return msg => {
+    const bytes = new TextEncoder().encode(msg), l = bytes.length;
+    const total = ((l + 9 + 63) >> 6) << 6;
+    const buf = new Uint8Array(total); buf.set(bytes); buf[l] = 0x80;
+    const dv = new DataView(buf.buffer);
+    dv.setUint32(total - 4, (l * 8) >>> 0); dv.setUint32(total - 8, Math.floor(l * 8 / 4294967296));
+    const h = H0.slice(), w = new Array(64);
+    for(let i = 0; i < total; i += 64){
+      for(let t = 0; t < 16; t++) w[t] = dv.getUint32(i + t * 4);
+      for(let t = 16; t < 64; t++){
+        const s0 = rotr(w[t-15], 7) ^ rotr(w[t-15], 18) ^ (w[t-15] >>> 3);
+        const s1 = rotr(w[t-2], 17) ^ rotr(w[t-2], 19) ^ (w[t-2] >>> 10);
+        w[t] = (w[t-16] + s0 + w[t-7] + s1) | 0;
+      }
+      let [a, b, c, d, e, f, g, hh] = h;
+      for(let t = 0; t < 64; t++){
+        const t1 = (hh + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + K[t] + w[t]) | 0;
+        const t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+        hh = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+      }
+      [a, b, c, d, e, f, g, hh].forEach((v, j) => h[j] = (h[j] + v) | 0);
+    }
+    return h.map(x => (x >>> 0).toString(16).padStart(8, "0")).join("");
+  };
+})();
+const hashPw = (salt, pw) => { let h = salt + ":" + pw; for(let i = 0; i < 1000; i++) h = sha256(h + salt); return h; };
+
+let user = null, uidFb = null, acct = null, baseTime = "", authMode = "login";
+let idToken = "", refreshTok = "", tokenExp = 0;
+const CONFIGURED = !/^PASTE/.test(FIREBASE_CONFIG.apiKey || "PASTE");
+const FS_ROOT = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/accounts`;
+let NET_TIMEOUT = 20000;
+const toEmail = u => u + "@hisaab.app";
+const syncEl = document.getElementById("sync");
+let unsaved = false;
+function setSync(t, err){ syncEl.textContent = t || ""; syncEl.className = err ? "err" : ""; }
+syncEl.onclick = () => { if(unsaved) cloudQueue(); };
+
+// ---- Talking directly to the server (REST) ----
+async function jfetch(url, opts){
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), NET_TIMEOUT);
+  try {
+    const r = await fetch(url, Object.assign({}, opts, {signal: ctl.signal}));
+    const txt = await r.text();
+    let j = null; try { j = JSON.parse(txt); } catch(e){}
+    if(!r.ok){
+      const er = j && j.error || {};
+      const x = new Error(er.message || ("HTTP " + r.status));
+      x.code = "http"; x.status = r.status; x.msg = er.message || ""; x.fstatus = er.status || "";
+      throw x;
+    }
+    return j;
+  } catch(e){
+    if(e.code === "http") throw e;
+    const x = new Error(e.name === "AbortError" ? "timeout" : "network");
+    x.code = x.message;
+    throw x;
+  } finally { clearTimeout(timer); }
+}
+async function authCall(kind, email, pw){
+  const j = await jfetch(`https://identitytoolkit.googleapis.com/v1/accounts:${kind}?key=${FIREBASE_CONFIG.apiKey}`, {
+    method: "POST", headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({email, password: pw, returnSecureToken: true})});
+  idToken = j.idToken; refreshTok = j.refreshToken;
+  tokenExp = Date.now() + (parseInt(j.expiresIn, 10) || 3600) * 1000;
+  return j.localId;
+}
+async function token(){
+  if(Date.now() < tokenExp - 60000) return idToken;
+  const j = await jfetch(`https://securetoken.googleapis.com/v1/token?key=${FIREBASE_CONFIG.apiKey}`, {
+    method: "POST", headers: {"Content-Type": "application/x-www-form-urlencoded"},
+    body: "grant_type=refresh_token&refresh_token=" + encodeURIComponent(refreshTok)});
+  idToken = j.id_token; refreshTok = j.refresh_token;
+  tokenExp = Date.now() + (parseInt(j.expires_in, 10) || 3600) * 1000;
+  return idToken;
+}
+async function fsReq(method, url, body){
+  const tk = await token();
+  return jfetch(url, {method, headers: {"Authorization": "Bearer " + tk, "Content-Type": "application/json"}, body: body ? JSON.stringify(body) : undefined});
+}
+const parseDoc = j => ({
+  salt: j.fields && j.fields.salt && j.fields.salt.stringValue || "",
+  pin: j.fields && j.fields.pin && j.fields.pin.stringValue || "",
+  data: j.fields && j.fields.data && j.fields.data.stringValue || "",
+  updateTime: j.updateTime || ""
+});
+const newDocFields = (salt, pin, data) => ({fields: {salt: {stringValue: salt}, pin: {stringValue: pin}, data: {stringValue: data}}});
+async function docGet(){
+  try { return parseDoc(await fsReq("GET", `${FS_ROOT}/${encodeURIComponent(uidFb)}`)); }
+  catch(e){
+    if(e.code === "http" && e.status === 404 && !/database[^.]*does not exist/i.test(e.msg)) return null;   // document not created yet
+    throw e;
+  }
+}
+const isConflict = e => e && e.code === "http" && (e.status === 409 || /FAILED_PRECONDITION|ABORTED/.test(e.fstatus));
+
+// ---- Cloud save (version check: so newer data from another phone is not overwritten) ----
+let saving = false, dirty = false;
+function cloudQueue(){ dirty = true; if(!saving) flush(); }
+async function flush(){
+  if(!uidFb || !acct) return;
+  saving = true;
+  while(dirty){
+    dirty = false;
+    setSync("⏳ Saving…");
+    try {
+      const j = await fsReq("PATCH",
+        `${FS_ROOT}/${encodeURIComponent(uidFb)}?currentDocument.updateTime=${encodeURIComponent(baseTime)}&updateMask.fieldPaths=data`,
+        {fields: {data: {stringValue: JSON.stringify(db)}}});
+      baseTime = j.updateTime; unsaved = false;
+      setSync("☁️ Saved ✔");
+    } catch(e){
+      if(isConflict(e)){
+        try {
+          const d = await docGet();
+          db = JSON.parse(d.data); baseTime = d.updateTime; unsaved = false;
+          if(!Array.isArray(db.history)) db.history = [];
+          setSync("🔄 Newer data from another device loaded");
+          alert("Newer data was saved from another device, so the screen has been refreshed with it. Please redo your latest entry or change.");
+          render();
+        } catch(e2){ unsaved = true; setSync("⚠️ Not saved. Tap here to try again.", true); }
+      } else {
+        unsaved = true;
+        setSync("⚠️ Not saved: " + authError(e).split(". ")[0] + ". Tap here to try again.", true);
+      }
+      break;
+    }
+  }
+  saving = false;
+}
+
+async function loadAccount(){
+  let d = await docGet();
+  if(!d){      // signup beech me ruka ho to default account bana do
+    const salt = uid() + uid();
+    d = parseDoc(await fsReq("POST", `${FS_ROOT}?documentId=${encodeURIComponent(uidFb)}`,
+      newDocFields(salt, hashPw(salt, "pin:4291"), JSON.stringify({models: [], history: []}))));
+  }
+  acct = {salt: d.salt, pin: d.pin};
+  baseTime = d.updateTime;
+  try { db = JSON.parse(d.data); } catch(e){ db = {models: [], history: []}; }
+  if(!db || !Array.isArray(db.models)) db = {models: [], history: []};
+  if(!Array.isArray(db.history)) db.history = [];
+}
+async function startSession(){
+  loading = true; migrate(); loading = false;
+  view = {page: "models"};
+  render();
+  setSync("");
+}
+function resetSession(){
+  user = null; uidFb = null; acct = null; baseTime = ""; unsaved = false; authMode = "login";
+  idToken = ""; refreshTok = ""; tokenExp = 0;
+  db = {models: [], history: []};
+  setSync("");
+  render();
+}
+
+// Delete Password is asked before any delete (set at signup; 4291 if left blank)
+function askPass(){
+  const p = prompt("Enter the Delete Password to continue:");
+  if(p === null) return false;
+  if(!acct || hashPw(acct.salt, "pin:" + p.trim()) !== acct.pin){ alert("❌ Wrong password. Nothing was deleted."); return false; }
+  return true;
+}
+
+function authError(e){
+  const m = String(e && e.msg || ""), c = e && e.code;
+  if(c === "timeout") return "The server did not respond. Check your internet and try again.";
+  if(c === "network") return "Could not reach the server. Check your internet. If the internet is fine, the browser may be blocking this file; in that case open the file from an online link.";
+  if(/EMAIL_EXISTS/.test(m)) return "This username already exists. Please choose another one.";
+  if(/INVALID_LOGIN_CREDENTIALS|INVALID_PASSWORD|EMAIL_NOT_FOUND/.test(m)) return "Wrong username or password.";
+  if(/TOO_MANY_ATTEMPTS/.test(m)) return "Too many failed attempts. Please try again after a while.";
+  if(/OPERATION_NOT_ALLOWED|CONFIGURATION_NOT_FOUND/.test(m)) return "Email/Password sign-in is not enabled in Firebase. Enable Email/Password under Authentication.";
+  if(/WEAK_PASSWORD/.test(m)) return "Password must be at least 6 characters.";
+  if(/API key not valid|API_KEY|API key/i.test(m)) return "The API key is invalid. Is the Firebase config set correctly in the file?";
+  if(/database[^.]*does not exist/i.test(m) && e.status === 404) return "Firestore Database has not been created. In Firebase go to Firestore Database > Create database.";
+  if(/SERVICE_DISABLED|has not been used|is disabled/i.test(m)) return "Firestore is not enabled. In Firebase go to Firestore Database > Create database.";
+  if(e && (e.status === 403 || /PERMISSION_DENIED/.test(e.fstatus || ""))) return "The database denied access. Have the Firestore Rules been published correctly?.";
+  return "Something went wrong: " + (m || (e && e.message) || e);
+}
+
+// ---- Saved login (username + password remembered on this device) ----
+function getSavedLogin(){ try { const j = JSON.parse(localStorage.getItem("bizSavedLogin") || "null"); return (j && j.u) ? j : null; } catch(e){ return null; } }
+function saveLogin(u, pw){ try { localStorage.setItem("bizSavedLogin", JSON.stringify({u, p: pw})); } catch(e){} }
+function forgetLogin(){ try { localStorage.removeItem("bizSavedLogin"); } catch(e){} }
+
+function renderLogin(){
+  const L = authMode === "login";
+  title.onclick = null; title.style.cursor = "";
+  title.textContent = L ? "Login" : "New Account";
+  const warn = CONFIGURED ? "" : `<div class="setup">⚙️ <b>Setup pending.</b> Firebase config has not been added to this file yet, so login will not work.</div>`;
+  app.innerHTML = warn + `<div class="card">
+    <label>Username</label><input id="lu" autocapitalize="none" autocomplete="username">
+    <label>Password</label><input id="lp" type="password" autocomplete="${L ? "current-password" : "new-password"}">
+    ${L ? "" : `<label>Confirm Password</label><input id="lp2" type="password" autocomplete="new-password">
+    <label>Delete Password</label><input id="lpin" type="password" inputmode="numeric">`}
+    <div style="height:14px"></div>
+    <button class="btn" id="go">${L ? "Login" : "Create Account"}</button>
+    <div style="height:8px"></div>
+    <button class="btn ghost" id="sw">${L ? "➕ Create New Account" : "← Back to Login"}</button>
+    ${L && getSavedLogin() ? `<div style="height:8px"></div><button class="btn ghost" id="forget">🗑️ Forget saved login</button><div class="sub">Username and password are saved on this phone. To change them, just type new ones and tap Login.</div>` : ""}
+  </div>`;
+  if(L){
+    const sv = getSavedLogin();
+    if(sv){ document.getElementById("lu").value = sv.u; document.getElementById("lp").value = sv.p || ""; }
+    const fg = document.getElementById("forget");
+    if(fg) fg.onclick = () => { if(confirm("Remove the saved username and password from this phone?")){ forgetLogin(); renderLogin(); } };
+  }
+  const go = document.getElementById("go");
+  app.querySelectorAll("input").forEach(el => el.onkeydown = e => { if(e.key === "Enter") go.click(); });
+  document.getElementById("sw").onclick = () => { authMode = L ? "signup" : "login"; renderLogin(); };
+
+  go.onclick = async () => {
+    if(!CONFIGURED){ alert("Firebase setup is pending."); return; }
+    const u = document.getElementById("lu").value.trim().toLowerCase();
+    const pw = document.getElementById("lp").value;
+    if(!L && (!u || !pw || !document.getElementById("lp2").value || !document.getElementById("lpin").value.trim())){ alert("Please fill in all the details."); return; }
+    if(!/^[a-z0-9._-]{3,30}$/.test(u)){ alert("Username must be 3 to 30 characters: only English letters, numbers, . _ - are allowed."); return; }
+    if(pw.length < 6){ alert("Password must be at least 6 characters."); return; }
+    let pin = "4291", initial = {models: [], history: []};
+    if(!L){
+      if(pw !== document.getElementById("lp2").value){ alert("The two passwords do not match."); return; }
+      pin = document.getElementById("lpin").value.trim();
+    }
+    go.disabled = true;
+    try {
+      go.textContent = "Please wait…";
+      uidFb = await authCall(L ? "signInWithPassword" : "signUp", toEmail(u), pw);
+      if(!L){
+        go.textContent = "Please wait…";
+        const salt = uid() + uid();
+        await fsReq("POST", `${FS_ROOT}?documentId=${encodeURIComponent(uidFb)}`, newDocFields(salt, hashPw(salt, "pin:" + pin), JSON.stringify(initial)));
+      }
+      go.textContent = "Please wait…";
+      await loadAccount();
+      user = u;
+      saveLogin(u, pw);
+      startSession();
+    } catch(e){
+      const partial = !L && uidFb;
+      uidFb = null; idToken = ""; refreshTok = "";
+      alert(authError(e) + (partial ? "\n\nThe account has already been created. Tap 'Back to Login' and log in with the same username and password." : ""));
+      go.disabled = false; go.textContent = L ? "Login" : "Create Account";
+    }
+  };
+}
+
+const validBackup = b => b && b.app === "bizapp" && b.data && Array.isArray(b.data.models);
+function parseBackup(text){
+  try {
+    let t = text.trim();
+    if(t[0] !== "{"){
+      const m = t.match(/<script id="bizEmbedded" type="application\/json">([\s\S]*?)<\/script>/);
+      if(!m) return null;
+      t = m[1];
+    }
+    const b = JSON.parse(t);
+    return validBackup(b) ? b : null;
+  } catch(e){ return null; }
+}
+
+function accountCardHtml(){
+  return `<div class="card" style="margin-top:14px">
+    <div class="row"><b>👤 ${esc(user)}</b><button class="btn edit" id="logout">Logout</button></div>
+    <div style="height:10px"></div>
+    <button class="btn ghost" id="refresh">🔄 Load latest data from cloud</button>
+    <div class="sub">Tap this if something was changed on another phone.</div>
+    <div style="height:10px"></div>
+    <button class="btn ghost" id="chgPw">🔒 Change Login Password</button>
+    <div class="sub">Enter your old password, then create a new one.</div>
+    <div style="height:10px"></div>
+    <button class="btn ghost" id="chgPin">🔑 Change Delete Password</button>
+    <div class="sub">This password is asked every time you delete a model, client, or entry.</div>
+    <div style="height:10px"></div>
+    <button class="btn ghost" id="impBtn">📥 Import data from an old version backup file</button>
+    <input type="file" id="impFile" accept=".json,.html,text/html,application/json" style="display:none">
+  </div>`;
+}
+function bindAccountCard(){
+  document.getElementById("logout").onclick = () => {
+    if(saving){ alert("Saving is in progress. Please wait 2 seconds and then log out."); return; }
+    if(unsaved && !confirm("Some changes have not been saved to the cloud. Log out anyway?")) return;
+    resetSession();
+  };
+  document.getElementById("refresh").onclick = async () => {
+    if(saving || dirty || unsaved){ alert("Please let the save finish first."); return; }
+    try { setSync("⏳ Loading from cloud…"); await loadAccount(); render(); setSync("☁️ Latest data loaded"); }
+    catch(e){ setSync("⚠️ Could not load from cloud.", true); }
+  };
+  document.getElementById("chgPw").onclick = async () => {
+    if(saving || dirty || unsaved){ alert("Please let the save finish first."); return; }
+    const oldPw = prompt("Enter your old password:");
+    if(oldPw === null) return;
+    const n1 = prompt("Enter your new password (at least 6 characters):");
+    if(n1 === null) return;
+    if(n1.length < 6){ alert("Password must be at least 6 characters."); return; }
+    const n2 = prompt("Enter the new password again:");
+    if(n2 === null) return;
+    if(n1 !== n2){ alert("The two passwords do not match."); return; }
+    try {
+      await authCall("signInWithPassword", toEmail(user), oldPw);     // verifies the old password
+    } catch(e){
+      if(e.code === "http"){ alert("❌ Old password is wrong."); return; }
+      alert(authError(e)); return;
+    }
+    try {
+      const j = await jfetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${FIREBASE_CONFIG.apiKey}`, {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({idToken, password: n1, returnSecureToken: true})});
+      if(j.idToken){
+        idToken = j.idToken; refreshTok = j.refreshToken || refreshTok;
+        tokenExp = Date.now() + (parseInt(j.expiresIn, 10) || 3600) * 1000;
+      }
+      if(getSavedLogin()) saveLogin(user, n1);
+      alert("✅ Password changed. Use the new password next time you log in.");
+    } catch(e){ alert(authError(e)); }
+  };
+  document.getElementById("chgPin").onclick = async () => {
+    if(saving || dirty || unsaved){ alert("Please let the save finish first."); return; }
+    const cur = prompt("Enter the current Delete Password:");
+    if(cur === null) return;
+    if(hashPw(acct.salt, "pin:" + cur.trim()) !== acct.pin){ alert("❌ Wrong password."); return; }
+    const n1 = prompt("Enter the new Delete Password:");
+    if(n1 === null) return;
+    if(!n1.trim()){ alert("Delete Password cannot be empty."); return; }
+    const n2 = prompt("Enter the new Delete Password again:");
+    if(n2 === null) return;
+    if(n1.trim() !== n2.trim()){ alert("The two passwords do not match."); return; }
+    try {
+      const np = hashPw(acct.salt, "pin:" + n1.trim());
+      const j = await fsReq("PATCH", `${FS_ROOT}/${encodeURIComponent(uidFb)}?updateMask.fieldPaths=pin`, {fields: {pin: {stringValue: np}}});
+      acct.pin = np; baseTime = j.updateTime;
+      alert("✅ Delete Password changed. It will now be asked for every delete.");
+    } catch(e){ alert(authError(e)); }
+  };
+  const f = document.getElementById("impFile");
+  document.getElementById("impBtn").onclick = () => f.click();
+  f.onchange = () => {
+    const file = f.files[0]; if(!file) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      const b = parseBackup(String(rd.result));
+      if(!b){ alert("This is not a valid backup file."); return; }
+      if(!confirm("Replace this account's current data with the data from this file?")) return;
+      db = b.data;
+      if(!Array.isArray(db.history)) db.history = [];
+      loading = true; migrate(); loading = false;
+      log("Imported data from an old backup file");
+      view = {page: "models"}; render();
+    };
+    rd.readAsText(file);
+  };
+}
+
+function render(){
+  const hb = document.getElementById("histBtn");
+  if(!user){ backBtn.style.display = "none"; xlBtn.style.display = "none"; hb.style.display = "none"; return renderLogin(); }
+  const inClient = view.page === "client";
+  hb.style.display = inClient ? "none" : "";            // no History / theme button inside a client,
+  themeBtn.style.display = inClient ? "none" : "";      // so the client name has full space
+  if(inClient) themeMenu.style.display = "none";
+  title.onclick = null; title.style.cursor = "";
+  backBtn.style.display = view.page === "models" ? "none" : "inline-block";
+  xlBtn.style.display = view.page === "client" ? "inline-block" : "none";
+  if(view.page === "models") return renderModels();
+  if(view.page === "clients") return renderClients();
+  if(view.page === "client") return renderClient();
+  if(view.page === "history") return renderHistory();
+  if(view.page === "account") return renderAccount();
+}
+function renderAccount(){
+  title.textContent = "Account";
+  app.innerHTML = accountCardHtml().replace('style="margin-top:14px"', '');
+  bindAccountCard();
+}
+
+function renderModels(){
+  title.textContent = "👤 " + user + " ▾";
+  title.style.cursor = "pointer";
+  title.onclick = () => { view = {page: "account"}; render(); };
+  app.innerHTML = `<button class="btn" id="add">+ Add Model</button><div style="height:12px"></div>` +
+    (db.models.length ? db.models.map(m => `
+      <div class="card item" data-id="${m.id}">
+        <div class="row"><b>${esc(m.name)}</b>
+        <button class="btn del" data-del="${m.id}">Delete</button></div>
+        <div class="sub">${m.clients.length} ${m.clients.length === 1 ? "client" : "clients"}</div>
+      </div>`).join("") : `<div class="empty">No models yet. Tap "Add Model".</div>`);
+  document.getElementById("add").onclick = () => {
+    const name = prompt("Enter the model name:");
+    if(!name || !name.trim()) return;
+    db.models.unshift({id: uid(), name: name.trim(), clients: []});
+    log("Model added: " + name.trim());
+    render();
+  };
+  app.querySelectorAll(".item").forEach(el => el.onclick = e => {
+    if(e.target.dataset.del) return;
+    view = {page: "clients", mid: el.dataset.id}; render();
+  });
+  app.querySelectorAll("[data-del]").forEach(b => b.onclick = () => {
+    const m = db.models.find(x => x.id === b.dataset.del);
+    if(askPass() && confirm(m.name + " - delete this?")){
+      db.models = db.models.filter(x => x.id !== m.id);
+      log("Model deleted: " + m.name); render();
+    }
+  });
+}
+
+function renderClients(){
+  const m = db.models.find(x => x.id === view.mid);
+  title.textContent = m.name;
+  app.innerHTML = `<button class="btn" id="add">+ Add Client Name</button><div style="height:12px"></div>` +
+    (m.clients.length ? m.clients.map(c => { const r = c.rounds[0]; return `
+      <div class="card item" data-id="${c.id}">
+        <div class="row"><b>${esc(c.name)}</b>
+        <button class="btn del" data-del="${c.id}">Delete</button></div>
+        <div class="sub">${r.entries.length} entry · Balance ${rs(total(r))}${c.rounds.length > 1 ? " · " + c.rounds.length + " accounts" : ""}</div>
+      </div>`; }).join("") : `<div class="empty">No clients in this model yet.</div>`);
+  document.getElementById("add").onclick = () => {
+    const name = prompt("Enter the client name:");
+    if(!name || !name.trim()) return;
+    m.clients.unshift({id: uid(), name: name.trim(), rounds: [{id: uid(), molding: "", color: "", entries: []}]});
+    log(`Client added: ${name.trim()}`);
+    render();
+  };
+  app.querySelectorAll(".item").forEach(el => el.onclick = e => {
+    if(e.target.dataset.del) return;
+    view = {page: "client", mid: m.id, cid: el.dataset.id}; render();
+  });
+  app.querySelectorAll("[data-del]").forEach(b => b.onclick = () => {
+    const c = m.clients.find(x => x.id === b.dataset.del);
+    if(askPass() && confirm(c.name + " - delete this?")){
+      m.clients = m.clients.filter(x => x.id !== c.id);
+      log(`Client deleted: ${c.name}`); render();
+    }
+  });
+}
+
+function renderClient(){
+  const m = db.models.find(x => x.id === view.mid);
+  const c = m.clients.find(x => x.id === view.cid);
+  const r = c.rounds[0];                          // current Molding/Color
+  const older = c.rounds.slice(1);
+  const editing = view.eid ? r.entries.find(x => x.id === view.eid) : null;
+  title.textContent = c.name;
+
+  const hasEntries = r.entries.length > 0;
+  const editMC = !!view.mc && hasEntries;         // Molding/Color edit mode
+  const locked = hasEntries && !editMC;           // Molding/Color locked after the first entry
+  const tot = total(r);
+  const zero = hasEntries && tot === 0 && !editMC;
+  const showForm = !zero || !!editing;
+
+  const mcBtn = `<button class="btn edit" data-mc="1" style="margin-top:8px">✏️ Molding / Color Edit</button>`;
+
+  const entryRows = (list, canEdit) => list.length ? list.map(e => `
+    <div class="entry">
+      <div class="row"><b>${fdate(e.t)} · ${ftime(e.t)}</b><b>Fitting ${rs(num(e.fitting))}</b></div>
+      ${canEdit ? `<div class="acts" style="margin-top:8px">
+        <button class="btn edit" data-edit="${e.id}">✏️ Edit</button>
+        <button class="btn del" data-delent="${e.id}">🗑 Delete</button>
+      </div>` : ""}
+    </div>`).join("") : `<div class="empty">No entries saved yet.</div>`;
+
+  const olderHtml = older.map((o, i) => `
+    <div class="card">
+      <div class="row"><h3>Old account #${older.length - i}</h3><button class="btn del" data-delround="${o.id}">🗑 Delete</button></div>
+      <div class="sub">Molding ${rs(num(o.molding))} · Color ${rs(num(o.color))}</div>
+      ${entryRows(o.entries, false)}
+      <div class="bal tot"><small>Total Fitting</small><strong>${rs(paid(o))}</strong></div>
+    </div>`).join("");
+
+  app.innerHTML = `
+    ${zero ? `<div class="note"><p>✅ Balance is ₹0. No new entries can be added to this Molding/Color.</p>
+      <button class="btn excel" id="newRound">➕ Add New Molding / Color</button>${mcBtn}</div>` : ""}
+    ${showForm ? `
+    <div class="card">
+      <div class="sub">Model: <b>${esc(m.name)}</b></div>
+      ${editing ? `<div class="note warn"><p style="margin:0">✏️ Editing Fitting</p></div>` : ""}
+      ${editMC ? `<div class="note warn"><p style="margin:0">✏️ Editing Molding / Color</p></div>` : ""}
+      <label>Molding</label><input type="number" inputmode="decimal" id="molding" value="${esc(r.molding)}" ${locked ? "readonly" : ""}>
+      <label>Color</label><input type="number" inputmode="decimal" id="color" value="${esc(r.color)}" ${locked ? "readonly" : ""}>
+      ${locked ? `<div class="lock">🔒 Molding and Color are saved; only Fitting can change now.</div>${mcBtn}` : ""}
+      ${editMC ? "" : `<label>Fitting</label><input type="number" inputmode="decimal" id="fitting" value="${editing ? esc(editing.fitting) : ""}">
+      <div class="dt" id="dt"></div>`}
+      <div class="bal" id="bal"></div>
+      <div style="height:12px"></div>
+      <button class="btn" id="save">${editMC ? "Update Molding / Color" : editing ? "Update Entry" : "Save"}</button>
+      ${editing || editMC ? `<div style="height:8px"></div><button class="btn ghost" id="cancel">Cancel</button>` : ""}
+    </div>` : ""}
+
+    <div class="card">
+      <h3>Saved Entries</h3>
+      ${entryRows(r.entries, true)}
+      <div class="bal tot"><small>Total Fitting</small><strong>${rs(paid(r))}</strong></div>
+    </div>
+    ${olderHtml}`;
+
+  if(showForm){
+    const fi = document.getElementById("fitting"), co = document.getElementById("color"), mo = document.getElementById("molding");
+    const others = paid(r) - (editing ? num(editing.fitting) : 0);
+    const calc = () => {
+      const b = num(co.value) - others - (fi ? num(fi.value) : 0);
+      const box = document.getElementById("bal");
+      box.className = "bal" + (b === 0 ? "" : " due");
+      box.innerHTML = `<small>Balance</small><strong>${rs(b)}</strong>`;
+    };
+    [fi, co, mo].forEach(el => { if(el) el.oninput = calc; });
+    calc();
+    if(!editMC){
+      const t = editing ? editing.t : Date.now();
+      document.getElementById("dt").innerHTML = `📅 Date: <b>${fdate(t)}</b> &nbsp; 🕒 Time: <b>${ftime(t)}</b>`;
+    }
+
+    document.getElementById("save").onclick = () => {
+      const mv = mo.value, cv = co.value;
+      if(editMC){
+        if(mv === "" || cv === ""){ alert("Enter Molding and Color."); return; }
+        if(num(cv) < paid(r)){ alert("Color cannot be less than the Fitting paid so far."); return; }
+        r.molding = mv; r.color = cv;
+        log(`Molding/Color edit: ${c.name} — Molding ${rs(num(mv))}, Color ${rs(num(cv))}, Balance ${rs(total(r))}`);
+        view = {page: "client", mid: m.id, cid: c.id}; render(); window.scrollTo({top: 0, behavior: "smooth"});
+        return;
+      }
+      const f = fi.value;
+      if(!locked && (mv === "" || cv === "")){ alert("Please enter Molding and Color first."); return; }
+      if(f === ""){ alert("Enter Fitting."); return; }
+      if(locked && num(f) <= 0){ alert("Fitting must be greater than 0."); return; }
+      if(num(cv) - others - num(f) < 0){ alert("Fitting is more than the balance. Balance cannot go negative."); return; }
+      if(!locked){ r.molding = mv; r.color = cv; }
+      if(editing){
+        editing.fitting = f;
+        log(`Entry edit: ${c.name} — ${fdate(editing.t)} ${ftime(editing.t)} — Fitting ${rs(num(f))}, Balance ${rs(total(r))}`);
+      } else {
+        r.entries.unshift({id: uid(), t: Date.now(), fitting: f});
+        log(`Save: ${c.name} — Molding ${rs(num(r.molding))}, Color ${rs(num(r.color))}, Fitting ${rs(num(f))}, Balance ${rs(total(r))}`);
+      }
+      view = {page: "client", mid: m.id, cid: c.id};
+      render();
+      window.scrollTo({top: 0, behavior: "smooth"});
+    };
+    const cancel = document.getElementById("cancel");
+    if(cancel) cancel.onclick = () => { view = {page: "client", mid: m.id, cid: c.id}; render(); };
+  }
+
+  app.querySelectorAll("[data-mc]").forEach(b => b.onclick = () => {
+    view = {page: "client", mid: m.id, cid: c.id, mc: true};
+    render(); window.scrollTo({top: 0, behavior: "smooth"});
+  });
+  const nr = document.getElementById("newRound");
+  if(nr) nr.onclick = () => {
+    c.rounds.unshift({id: uid(), molding: "", color: "", entries: []});
+    log(`New Molding/Color started: ${c.name}`);
+    view = {page: "client", mid: m.id, cid: c.id}; render(); window.scrollTo({top: 0, behavior: "smooth"});
+  };
+  app.querySelectorAll("[data-edit]").forEach(b => b.onclick = () => {
+    view = {page: "client", mid: m.id, cid: c.id, eid: b.dataset.edit};
+    render(); window.scrollTo({top: 0, behavior: "smooth"});
+  });
+  app.querySelectorAll("[data-delround]").forEach(b => b.onclick = () => {
+    const o = c.rounds.find(x => x.id === b.dataset.delround);
+    if(!o || o === c.rounds[0]) return;
+    if(askPass() && confirm("Delete this entire old account?")){
+      c.rounds = c.rounds.filter(x => x.id !== o.id);
+      log(`Old account deleted: ${c.name} — Molding ${rs(num(o.molding))}, Color ${rs(num(o.color))}, Fitting ${rs(paid(o))}`);
+      view = {page: "client", mid: m.id, cid: c.id};
+      render();
+    }
+  });
+  app.querySelectorAll("[data-delent]").forEach(b => b.onclick = () => {
+    const e = r.entries.find(x => x.id === b.dataset.delent);
+    if(askPass() && confirm(`Delete the entry of ${fdate(e.t)} ${ftime(e.t)}?`)){
+      r.entries = r.entries.filter(x => x.id !== e.id);
+      log(`Entry delete: ${c.name} — ${fdate(e.t)} ${ftime(e.t)}, Fitting ${rs(num(e.fitting))}`);
+      view = {page: "client", mid: m.id, cid: c.id};
+      render();
+    }
+  });
+}
+
+// Only this client's entries (all Molding/Color accounts) are downloaded as Excel (.xls)
+function exportExcel(m, c){
+  const rounds = c.rounds.filter(r => r.entries.length).reverse();
+  if(!rounds.length){ alert("This client has no entries yet."); return; }
+  const td = v => `<td>${v}</td>`;
+  let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"></head><body>
+<table border="1">
+<tr><td><b>Model</b></td><td colspan="3">${esc(m.name)}</td></tr>
+<tr><td><b>Client</b></td><td colspan="3">${esc(c.name)}</td></tr>`;
+  rounds.forEach((r, i) => {
+    html += `<tr><td colspan="4"></td></tr>
+<tr><td><b>Molding</b></td><td colspan="3">${num(r.molding)}</td></tr>
+<tr><td><b>Color</b></td><td colspan="3">${num(r.color)}</td></tr>
+<tr style="background:#dbe4ff;font-weight:bold"><td>Date</td><td>Time</td><td>Fitting</td><td>Balance</td></tr>`;
+    let run = num(r.color);
+    r.entries.slice().reverse().forEach(e => {
+      run -= num(e.fitting);
+      html += `<tr>${td(fdate(e.t))}${td(ftime(e.t))}${td(num(e.fitting))}${td(run)}</tr>`;
+    });
+    html += `<tr style="font-weight:bold"><td colspan="2">Total</td>${td(paid(r))}${td(total(r))}</tr>`;
+  });
+  html += `</table></body></html>`;
+  const blob = new Blob(["\ufeff" + html], {type: "application/vnd.ms-excel;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = (m.name + "_" + c.name).replace(/[^\w\u0900-\u097F-]+/g, "_") + ".xls";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  log(`Excel file created: ${c.name}`);
+}
+
+function renderHistory(){
+  title.textContent = "History";
+  app.innerHTML = `<div class="card">` + (db.history.length ?
+    db.history.map(h => `<div class="hist"><time>${esc(h.t)}</time>${esc(h.text)}</div>`).join("")
+    : `<div class="empty">No history yet.</div>`) + `</div>`;
+}
+
+// Ask for login again if the app stays in the background for more than 60 seconds
+let hiddenAt = 0;
+document.addEventListener("visibilitychange", () => {
+  if(document.hidden){ hiddenAt = Date.now(); return; }
+  if(user && hiddenAt && Date.now() - hiddenAt > 60000 && !saving && !unsaved) resetSession();
+});
+render();
+</script>
+<script>
+if('serviceWorker' in navigator && location.protocol!=='file:'){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});
+}
+</script>
+</body>
+</html>
